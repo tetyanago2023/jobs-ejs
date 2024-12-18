@@ -11,6 +11,7 @@
   "description": "Server Side Rendering with EJS",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^5.0.0",
     "cookie-parser": "^1.4.7",
@@ -29,7 +30,7 @@
   },
   "devDependencies": {
     "eslint": "^9.17.0",
-    "prettier": "3.4.2",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "prettier": "3.4.2"
   }
 }
