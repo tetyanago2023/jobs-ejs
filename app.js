@@ -38,35 +38,41 @@ if (app.get("env") === "production") {
 
 app.use(session(sessionParms));
 
-// secret word handling in the session
+app.use(require("connect-flash")());
+
 app.get("/secretWord", (req, res) => {
     if (!req.session.secretWord) {
         req.session.secretWord = "syzygy"; // Initialize with default if not set
     }
-    res.render("secretWord", { secretWord: req.session.secretWord });
+
+    // Retrieve flash messages
+    const errors = req.flash("error");
+    const info = req.flash("info");
+
+    res.render("secretWord", {
+        secretWord: req.session.secretWord,
+        errors,
+        info
+    });
 });
 
 app.post("/secretWord", (req, res) => {
     try {
         const input = req.body.secretWord;
-        // Ensure the secret word is always a string
-        req.session.secretWord =
-            typeof input === "string" ? input : JSON.stringify(input);
+
+        if (typeof input === "string" && input.toUpperCase()[0] === "P") {
+            req.flash("error", "That word won't work!");
+            req.flash("error", "You can't use words that start with 'P'.");
+        } else {
+            // Ensure secretWord is always a string
+            req.session.secretWord =
+                typeof input === "string" ? input : JSON.stringify(input);
+            req.flash("info", "The secret word was changed.");
+        }
     } catch (err) {
-        req.session.secretWord = "Invalid input";
+        req.flash("error", "Invalid input.");
     }
     res.redirect("/secretWord");
-});
-
-// Handle 404 errors
-app.use((req, res) => {
-    res.status(404).send(`That page (${req.url}) was not found.`);
-});
-
-// Handle other errors
-app.use((err, req, res, next) => {
-    res.status(500).send(err.message);
-    console.log(err);
 });
 
 const PORT = process.env.PORT || 3000;
