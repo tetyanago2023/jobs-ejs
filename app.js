@@ -4,6 +4,7 @@ const express = require("express");
 require("express-async-errors");
 require("dotenv").config(); // Load environment variables
 const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 
 const app = express();
 
@@ -11,11 +12,9 @@ app.set("view engine", "ejs");
 app.use(require("body-parser").urlencoded({ extended: true }));
 
 // Session middleware setup
-const MongoDBStore = require("connect-mongodb-session")(session);
 const url = process.env.MONGO_URI;
 
 const store = new MongoDBStore({
-    // may throw an error, which won't be caught
     uri: url,
     collection: "mySessions",
 });
@@ -48,46 +47,19 @@ app.use(passport.session());
 app.use(require("connect-flash")());
 
 app.use(require("./middleware/storeLocals"));
+
+// Routes
 app.get("/", (req, res) => {
     res.render("index");
 });
+
 app.use("/sessions", require("./routes/sessionRoutes"));
 
-app.get("/secretWord", (req, res) => {
-    if (!req.session.secretWord) {
-        req.session.secretWord = "syzygy"; // Initialize with default if not set
-    }
+const auth = require("./middleware/auth");
+const secretWordRouter = require("./routes/secretWord");
+app.use("/secretWord", auth, secretWordRouter);
 
-    // Retrieve flash messages
-    const errors = req.flash("error");
-    const info = req.flash("info");
-
-    res.render("secretWord", {
-        secretWord: req.session.secretWord,
-        errors,
-        info
-    });
-});
-
-app.post("/secretWord", (req, res) => {
-    try {
-        const input = req.body.secretWord;
-
-        if (typeof input === "string" && input.toUpperCase()[0] === "P") {
-            req.flash("error", "That word won't work!");
-            req.flash("error", "You can't use words that start with 'P'.");
-        } else {
-            // Ensure secretWord is always a string
-            req.session.secretWord =
-                typeof input === "string" ? input : JSON.stringify(input);
-            req.flash("info", "The secret word was changed.");
-        }
-    } catch (err) {
-        req.flash("error", "Invalid input.");
-    }
-    res.redirect("/secretWord");
-});
-
+// Start server
 const PORT = process.env.PORT || 3000;
 
 const start = async () => {
