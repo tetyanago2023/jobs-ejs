@@ -1,7 +1,7 @@
 // controllers/sessionController.js
 
 const User = require("../models/User");
-const parseVErr = require("../util/parseValidationErr");
+const parseVErr = require("../util/parseValidationErrs");
 
 const registerShow = (req, res) => {
     res.render("register");
