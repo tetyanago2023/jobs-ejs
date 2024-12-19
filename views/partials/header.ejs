@@ -1,12 +1,24 @@
+<!--views/partials/header.ejs-->
+
 <h1>The Jobs EJS Application</h1>
+<% if (user) { %>
+    <p>User <%= user.name %> is logged on.</p>
+    <form method="POST" action="/sessions/logoff">
+        <button>Logoff</button>
+    </form>
+<% } %>
+<% if (errors) {
+errors.forEach((err) => { %>
+    <div>
+        Error: <%= err %>
+    </div>
+<% })
+} %>
+<% if (info) {
+info.forEach((msg) => { %>
+    <div>
+        Info: <%= msg %>
+    </div>
+<% })
+} %>
 <hr />
-<% if (errors && errors.length > 0) { %>
-    <% errors.forEach((err) => { %>
-        <div class="alert alert-danger">Error: <%= err %></div>
-    <% }) %>
-<% } %>
-<% if (info && info.length > 0) { %>
-    <% info.forEach((msg) => { %>
-        <div class="alert alert-info">Info: <%= msg %></div>
-    <% }) %>
-<% } %>
