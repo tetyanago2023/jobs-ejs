@@ -1,0 +1,22 @@
+<!--views/newJob.ejs-->
+
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<h2>Create New Job</h2>
+<form method="POST" action="/jobs">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
+    <label for="company">Company</label>
+    <input type="text" id="company" name="company" required>
+    <label for="position">Position</label>
+    <input type="text" id="position" name="position" required>
+    <label for="status">Status</label>
+    <select id="status" name="status">
+        <option value="pending">Pending</option>
+        <option value="interview">Interview</option>
+        <option value="declined">Declined</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+<%- include("partials/footer.ejs") %>

@@ -91,6 +91,9 @@ const auth = require("./middleware/auth");
 const secretWordRouter = require("./routes/secretWord");
 app.use("/secretWord", auth, secretWordRouter);
 
+const jobsRouter = require("./routes/jobs");
+app.use("/jobs", auth, jobsRouter);
+
 // Start server
 const PORT = process.env.PORT || 3000;
 

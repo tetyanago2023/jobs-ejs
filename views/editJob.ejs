@@ -1,0 +1,22 @@
+<!--views/editJob.ejs-->
+
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<h2>Edit Job</h2>
+<form method="POST" action="/jobs/update/<%= job._id %>">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
+    <label for="company">Company</label>
+    <input type="text" id="company" name="company" value="<%= job.company %>" required>
+    <label for="position">Position</label>
+    <input type="text" id="position" name="position" value="<%= job.position %>" required>
+    <label for="status">Status</label>
+    <select id="status" name="status">
+        <option value="pending" <%= job.status === "pending" ? "selected" : "" %>>Pending</option>
+        <option value="interview" <%= job.status === "interview" ? "selected" : "" %>>Interview</option>
+        <option value="declined" <%= job.status === "declined" ? "selected" : "" %>>Declined</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+<%- include("partials/footer.ejs") %>

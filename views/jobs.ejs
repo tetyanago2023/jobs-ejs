@@ -1,0 +1,39 @@
+<!--/views/jobs.ejs-->
+
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<h2>Jobs List</h2>
+<table id="jobs-table" class="table">
+    <thead>
+    <tr id="jobs-table-header">
+        <th>Company</th>
+        <th>Position</th>
+        <th>Status</th>
+        <th colspan="2"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if (jobs && jobs.length) { %>
+        <% jobs.forEach((job) => { %>
+            <tr>
+                <td><%= job.company %></td>
+                <td><%= job.position %></td>
+                <td><%= job.status %></td>
+                <td>
+                    <a href="/jobs/edit/<%= job.id %>">
+                        <button type="button" class="btn btn-warning">Edit</button>
+                    </a>
+                </td>
+                <td>
+                    <form method="POST" action="/jobs/delete/<%= job.id %>" style="display:inline;">
+                        <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    <% } %>
+    </tbody>
+</table>
+<%- include("partials/footer.ejs") %>
