@@ -37,7 +37,7 @@ const showEditJobForm = async (req, res, next) => {
             req.flash("error", "Job not found.");
             return res.redirect("/jobs");
         }
-        res.render("editJob", { job, _csrf: req.csrfToken() }); // You’ll need a `views/editJob.ejs` template
+        res.render("editJob", { job, _csrf: res.locals._csrf }); // Use res.locals._csrf instead
     } catch (error) {
         next(error);
     }

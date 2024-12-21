@@ -4,6 +4,14 @@
 <%- include("partials/header.ejs") %>
 
 <h2>Jobs List</h2>
+
+<!-- Add New Job Button -->
+<div style="margin-bottom: 20px;">
+    <a href="/jobs/new">
+        <button type="button" class="btn btn-primary">Add New Job</button>
+    </a>
+</div>
+
 <table id="jobs-table" class="table">
     <thead>
     <tr id="jobs-table-header">
@@ -33,7 +41,12 @@
                 </td>
             </tr>
         <% }) %>
+    <% } else { %>
+        <tr>
+            <td colspan="5" class="text-center">No jobs found. Click button "Add New Job" above to create one!</td>
+        </tr>
     <% } %>
     </tbody>
 </table>
+
 <%- include("partials/footer.ejs") %>
