@@ -30,6 +30,19 @@ const createJob = async (req, res, next) => {
     }
 };
 
+const showJob = async (req, res, next) => {
+    try {
+        const job = await Job.findOne({ _id: req.params.id, createdBy: req.user.id });
+        if (!job) {
+            req.flash("error", "Job not found.");
+            return res.redirect("/jobs");
+        }
+        res.render("showJob", { job, viewOnly: true, _csrf: res.locals._csrf }); // use 'showJob' here
+    } catch (error) {
+        next(error);
+    }
+};
+
 const showEditJobForm = async (req, res, next) => {
     try {
         const job = await Job.findOne({ _id: req.params.id, createdBy: req.user.id });
@@ -76,6 +89,7 @@ const deleteJob = async (req, res, next) => {
 module.exports = {
     getJobs,
     showNewJobForm,
+    showJob,
     createJob,
     showEditJobForm,
     updateJob,

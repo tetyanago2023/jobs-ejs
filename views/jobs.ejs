@@ -18,7 +18,7 @@
         <th>Company</th>
         <th>Position</th>
         <th>Status</th>
-        <th colspan="2"></th>
+        <th colspan="3"></th> <!-- Adjusted colspan for new "Show Job" button -->
     </tr>
     </thead>
     <tbody>
@@ -29,11 +29,19 @@
                 <td><%= job.position %></td>
                 <td><%= job.status %></td>
                 <td>
+                    <!-- Show Job Button -->
+                    <a href="/jobs/<%= job.id %>">
+                        <button type="button" class="btn btn-info">Show Job</button>
+                    </a>
+                </td>
+                <td>
+                    <!-- Edit Button -->
                     <a href="/jobs/edit/<%= job.id %>">
                         <button type="button" class="btn btn-warning">Edit</button>
                     </a>
                 </td>
                 <td>
+                    <!-- Delete Button -->
                     <form method="POST" action="/jobs/delete/<%= job.id %>" style="display:inline;">
                         <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -43,7 +51,7 @@
         <% }) %>
     <% } else { %>
         <tr>
-            <td colspan="5" class="text-center">No jobs found. Click button "Add New Job" above to create one!</td>
+            <td colspan="6" class="text-center">No jobs found. Click button "Add New Job" above to create one!</td>
         </tr>
     <% } %>
     </tbody>
