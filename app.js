@@ -5,11 +5,16 @@ require("express-async-errors");
 require("dotenv").config(); // Load environment variables
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const cookieParser = require("cookie-parser"); // Added
+const csrf = require("host-csrf"); // Added
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(require("body-parser").urlencoded({ extended: true }));
+
+// Cookie parser
+app.use(cookieParser(process.env.SESSION_SECRET)); // Added
 
 // Session middleware setup
 const url = process.env.MONGO_URI;
@@ -47,6 +52,33 @@ app.use(passport.session());
 app.use(require("connect-flash")());
 
 app.use(require("./middleware/storeLocals"));
+
+// CSRF Middleware Setup
+let csrf_development_mode = true;
+if (app.get("env") === "production") {
+    csrf_development_mode = false;
+    app.set("trust proxy", 1);
+}
+
+const csrf_options = {
+    protected_operations: ["PATCH", "POST", "DELETE"],
+    protected_content_types: ["application/json", "application/x-www-form-urlencoded"],
+    development_mode: csrf_development_mode,
+};
+
+const csrf_middleware = csrf(csrf_options); // Initialize and return middleware
+app.use(csrf_middleware); // Add CSRF middleware after cookie and body parsers
+
+// CSRF Token Logger
+app.use((req, res, next) => {
+    console.log(
+        csrf_development_mode
+            ? "CSRF protection is not secure because HTTP is used. Use HTTPS in production."
+            : "CSRF protection enabled securely."
+    );
+    res.locals._csrf = csrf.token(req, res); // Make token available to templates
+    next();
+});
 
 // Routes
 app.get("/", (req, res) => {
