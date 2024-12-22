@@ -4,7 +4,7 @@
 <%- include("partials/header.ejs") %>
 
 <h2>Edit Job</h2>
-<form method="POST" action="/jobs/update/<%= job._id %>">
+<form id="edit-job-form" method="POST" action="/jobs/update/<%= job._id %>">
     <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
     <label for="company">Company</label>
     <input type="text" id="company" name="company" value="<%= job.company %>" required>
@@ -16,12 +16,23 @@
         <option value="interview" <%= job.status === "interview" ? "selected" : "" %>>Interview</option>
         <option value="declined" <%= job.status === "declined" ? "selected" : "" %>>Declined</option>
     </select>
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-primary" id="update-button">Update</button>
 </form>
 
 <!-- Back to Jobs Button (Cancel) -->
 <a href="/jobs">
     <button type="button" class="btn btn-secondary">Cancel</button>
 </a>
+
+<!-- Script to add confirmation before updating a job -->
+<script>
+    // Add confirmation before submitting the form
+    document.getElementById('update-button').addEventListener('click', function(event) {
+        const confirmation = confirm("Are you sure you want to update this job?");
+        if (!confirmation) {
+            event.preventDefault(); // Prevent form submission if canceled
+        }
+    });
+</script>
 
 <%- include("partials/footer.ejs") %>

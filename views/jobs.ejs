@@ -1,5 +1,3 @@
-<!--/views/jobs.ejs-->
-
 <%- include("partials/head.ejs") %>
 <%- include("partials/header.ejs") %>
 
@@ -42,9 +40,10 @@
                 </td>
                 <td>
                     <!-- Delete Button -->
-                    <form method="POST" action="/jobs/delete/<%= job.id %>" style="display:inline;">
+                    <form method="POST" action="/jobs/delete/<%= job.id %>" style="display:inline;" id="delete-form-<%= job.id %>">
                         <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
-                        <button type="submit" class="btn btn-danger">Delete</button>
+<!--                        <button type="submit" class="btn btn-danger" onclick="return confirmDelete(event, <%= job.id %>)">Delete</button>-->
+                        <button type="submit" class="btn btn-danger" id="delete-button">Delete</button>
                     </form>
                 </td>
             </tr>
@@ -57,4 +56,16 @@
     </tbody>
 </table>
 
+<!-- Script to add confirmation before deleting a job -->
+<script>
+    // Add confirmation before deleting a job
+    document.getElementById('delete-button').addEventListener('click', function(event) {
+        const confirmation = confirm("Are you sure you want to delete this job?");
+        if (!confirmation) {
+            event.preventDefault(); // Prevent form submission if canceled
+        }
+    });
+</script>
+
 <%- include("partials/footer.ejs") %>
+
