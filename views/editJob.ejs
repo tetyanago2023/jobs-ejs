@@ -7,7 +7,7 @@
 <form id="edit-job-form" method="POST" action="/jobs/update/<%= job._id %>">
     <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
     <label for="company">Company</label>
-    <input type="text" id="company" name="company" value="<%= job.company %>" required>
+    <input type="text" id="company" name="company" value="<%= job.company %>" required autofocus>
     <label for="position">Position</label>
     <input type="text" id="position" name="position" value="<%= job.position %>" required>
     <label for="status">Status</label>

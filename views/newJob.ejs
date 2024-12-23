@@ -7,7 +7,7 @@
 <form method="POST" action="/jobs">
     <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
     <label for="company">Company</label>
-    <input type="text" id="company" name="company" required>
+    <input type="text" id="company" name="company" required autofocus>
     <label for="position">Position</label>
     <input type="text" id="position" name="position" required>
     <label for="status">Status</label>
@@ -17,6 +17,10 @@
         <option value="declined">Declined</option>
     </select>
     <button type="submit" class="btn btn-primary">Create</button>
+    <!-- Back to Jobs Button (Cancel) -->
+    <a href="/jobs">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+    </a>
 </form>
 
 <%- include("partials/footer.ejs") %>
