@@ -1,10 +1,31 @@
 // controllers/jobs.js
 
 const Job = require("../models/Job");
+const {StatusCodes} = require("http-status-codes");
 
-const getJobs = async (req, res, next) => {
+// const getAllJobs = async (req, res, next) => {
+//     try {
+//         const jobs = await Job.find({ createdBy: req.user.id });
+//         console.log(jobs, req.user.userId)
+//         res.render("jobs", { jobs });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+const getAllJobs = async (req, res, next) => {
     try {
-        const jobs = await Job.find({ createdBy: req.user.id });
+        // Validate the presence of req.user and its id or userId
+        if (!req.user || !req.user.id) {
+            throw new Error("User information is missing.");
+        }
+
+        // Fetch jobs created by the user
+        // const jobs = await Job.find({ createdBy: req.user.id }).exec();
+        const jobs = await Job.find({ createdBy: req.user.id }).sort('createdAt');
+        console.log(jobs, req.user.id);
+
+        // Render the jobs list
         res.render("jobs", { jobs });
     } catch (error) {
         next(error);
@@ -87,7 +108,7 @@ const deleteJob = async (req, res, next) => {
 };
 
 module.exports = {
-    getJobs,
+    getAllJobs,
     showNewJobForm,
     showJob,
     createJob,

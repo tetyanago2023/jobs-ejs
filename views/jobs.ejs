@@ -35,7 +35,7 @@
                 <td>
                     <!-- Edit Button -->
                     <a href="/jobs/edit/<%= job.id %>">
-                        <button type="button" class="btn btn-warning">Edit</button>
+                        <button type="button" class="btn btn-warning">Edit Job</button>
                     </a>
                 </td>
                 <td>
@@ -43,7 +43,7 @@
                     <form method="POST" action="/jobs/delete/<%= job.id %>" style="display:inline;" id="delete-form-<%= job.id %>">
                         <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
 <!--                        <button type="submit" class="btn btn-danger" onclick="return confirmDelete(event, <%= job.id %>)">Delete</button>-->
-                        <button type="submit" class="btn btn-danger" id="delete-button">Delete</button>
+                        <button type="submit" class="btn btn-danger" id="delete-button">Delete Job</button>
                     </form>
                 </td>
             </tr>

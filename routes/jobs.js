@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    getJobs,
+    getAllJobs,
     showNewJobForm,
     showJob,
     createJob,
@@ -14,7 +14,7 @@ const {
 } = require("../controllers/jobs");
 
 router.route("/")
-    .get(getJobs) // GET /jobs - List all jobs
+    .get(getAllJobs) // GET /jobs - List all jobs
     .post(createJob); // POST /jobs - Add a new job
 
 router.get("/new", showNewJobForm); // GET /jobs/new - Show form to create a new job
