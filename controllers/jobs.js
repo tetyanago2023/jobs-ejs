@@ -5,28 +5,39 @@ const {StatusCodes} = require("http-status-codes");
 
 const getAllJobs = async (req, res, next) => {
     try {
-        // Validate the presence of req.user
         if (!req.user || !req.user.id) {
             throw new Error("User information is missing.");
         }
 
-        // Extract page and limit from query parameters
         const page = parseInt(req.query.page, 10) || 1;
-        // const limit = parseInt(req.query.limit, 10) || 10;
         const limit = parseInt(req.query.limit, 10) || 5;
         const skip = (page - 1) * limit;
 
-        // Fetch jobs with pagination
-        const jobs = await Job.find({ createdBy: req.user.id })
+        // Extract filters from query parameters
+        const companyFilter = req.query.company || '';
+        const positionFilter = req.query.position || '';
+        const statusFilter = req.query.status || '';
+
+        // Fetch jobs with filters
+        const jobs = await Job.find({
+            createdBy: req.user.id,
+            company: { $regex: companyFilter, $options: 'i' },
+            position: { $regex: positionFilter, $options: 'i' },
+            status: { $regex: statusFilter, $options: 'i' }
+        })
             .sort('createdAt')
             .skip(skip)
             .limit(limit);
 
-        // Get total count of jobs for pagination metadata
-        const totalJobs = await Job.countDocuments({ createdBy: req.user.id });
+        const totalJobs = await Job.countDocuments({
+            createdBy: req.user.id,
+            company: { $regex: companyFilter, $options: 'i' },
+            position: { $regex: positionFilter, $options: 'i' },
+            status: { $regex: statusFilter, $options: 'i' }
+        });
+
         const totalPages = Math.ceil(totalJobs / limit);
 
-        // Render the jobs list with pagination data
         res.render("jobs", {
             jobs,
             currentPage: page,
@@ -34,6 +45,9 @@ const getAllJobs = async (req, res, next) => {
             hasPrevPage: page > 1,
             hasNextPage: page < totalPages,
             limit,
+            companyFilter,
+            positionFilter,
+            statusFilter
         });
     } catch (error) {
         next(error);

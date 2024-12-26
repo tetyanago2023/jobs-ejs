@@ -22,3 +22,19 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+/* Style for filter input fields and placeholders */
+#jobs-table input {
+    width: 120px; /* Adjust as needed for desired width */
+    padding: 5px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#jobs-table input::placeholder {
+    font-size: 12px; /* Adjust size as needed */
+    color: #666; /* Placeholder text color */
+    font-style: italic; /* Optional: Add styling for differentiation */
+}
