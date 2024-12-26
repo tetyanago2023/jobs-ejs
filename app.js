@@ -7,8 +7,12 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser"); // Added
 const csrf = require("host-csrf"); // Added
+const path = require("path"); // Import the `path` module
 
 const app = express();
+
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public'))); // Use `path.join`
 
 app.set("view engine", "ejs");
 app.use(require("body-parser").urlencoded({ extended: true }));

@@ -17,12 +17,11 @@
         <option value="declined" <%= job.status === "declined" ? "selected" : "" %>>Declined</option>
     </select>
     <button type="submit" class="btn btn-primary" id="update-button">Update</button>
+    <!-- Back to Jobs Button (Cancel) -->
+    <a href="/jobs">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+    </a>
 </form>
-
-<!-- Back to Jobs Button (Cancel) -->
-<a href="/jobs">
-    <button type="button" class="btn btn-secondary">Cancel</button>
-</a>
 
 <!-- Script to add confirmation before updating a job -->
 <script>

@@ -3,30 +3,38 @@
 const Job = require("../models/Job");
 const {StatusCodes} = require("http-status-codes");
 
-// const getAllJobs = async (req, res, next) => {
-//     try {
-//         const jobs = await Job.find({ createdBy: req.user.id });
-//         console.log(jobs, req.user.userId)
-//         res.render("jobs", { jobs });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
 const getAllJobs = async (req, res, next) => {
     try {
-        // Validate the presence of req.user and its id or userId
+        // Validate the presence of req.user
         if (!req.user || !req.user.id) {
             throw new Error("User information is missing.");
         }
 
-        // Fetch jobs created by the user
-        // const jobs = await Job.find({ createdBy: req.user.id }).exec();
-        const jobs = await Job.find({ createdBy: req.user.id }).sort('createdAt');
-        console.log(jobs, req.user.id);
+        // Extract page and limit from query parameters
+        const page = parseInt(req.query.page, 10) || 1;
+        // const limit = parseInt(req.query.limit, 10) || 10;
+        const limit = parseInt(req.query.limit, 10) || 5;
+        const skip = (page - 1) * limit;
 
-        // Render the jobs list
-        res.render("jobs", { jobs });
+        // Fetch jobs with pagination
+        const jobs = await Job.find({ createdBy: req.user.id })
+            .sort('createdAt')
+            .skip(skip)
+            .limit(limit);
+
+        // Get total count of jobs for pagination metadata
+        const totalJobs = await Job.countDocuments({ createdBy: req.user.id });
+        const totalPages = Math.ceil(totalJobs / limit);
+
+        // Render the jobs list with pagination data
+        res.render("jobs", {
+            jobs,
+            currentPage: page,
+            totalPages,
+            hasPrevPage: page > 1,
+            hasNextPage: page < totalPages,
+            limit,
+        });
     } catch (error) {
         next(error);
     }
