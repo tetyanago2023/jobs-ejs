@@ -38,3 +38,43 @@
     color: #666; /* Placeholder text color */
     font-style: italic; /* Optional: Add styling for differentiation */
 }
+
+/* Default (light mode) styles */
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --table-border-color: #ddd;
+    --input-bg-color: #f9f9f9;
+    --input-text-color: #000000;
+}
+
+/* Dark mode styles */
+[data-theme="dark"] {
+    --background-color: #1e1e1e;
+    --text-color: #ffffff;
+    --table-border-color: #444;
+    --input-bg-color: #333;
+    --input-text-color: #ffffff;
+}
+
+/* Apply theme variables globally */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+table {
+    border-color: var(--table-border-color);
+    color: var(--text-color);
+}
+
+table th,
+table td {
+    color: var(--text-color);
+}
+
+input[type="text"] {
+    background-color: var(--input-bg-color);
+    color: var(--input-text-color);
+    border: 1px solid var(--table-border-color);
+}

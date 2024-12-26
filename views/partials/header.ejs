@@ -2,6 +2,7 @@
 
 <div class="py-3">
     <h1 class="text-center">The Jobs EJS Application</h1>
+    <button id="theme-toggle" class="btn btn-secondary">Switch to Dark Mode</button>
     <% if (user) { %>
         <p class="text-center">User <strong><%= user.name %></strong> is logged on.</p>
         <form method="POST" action="/sessions/logoff" class="text-center">
