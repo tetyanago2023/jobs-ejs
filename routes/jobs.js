@@ -5,22 +5,24 @@ const router = express.Router();
 
 const {
     getAllJobs,
-    showNewJobForm,
-    showJob,
+    showJobForm, // Handles both new and edit forms
     createJob,
-    showEditJobForm,
     updateJob,
     deleteJob,
 } = require("../controllers/jobs");
 
+// List of jobs and create job
 router.route("/")
-    .get(getAllJobs) // GET /jobs - List all jobs
-    .post(createJob); // POST /jobs - Add a new job
+    .get(getAllJobs) // Render jobs list
+    .post(createJob); // Create a new job
 
-router.get("/new", showNewJobForm); // GET /jobs/new - Show form to create a new job
-router.get("/edit/:id", showEditJobForm); // GET /jobs/edit/:id - Show form to edit a job
-router.get("/:id", showJob); // GET /jobs/:id - View a single job (Show job)
-router.post("/update/:id", updateJob); // POST /jobs/update/:id - Update a job
-router.post("/delete/:id", deleteJob); // POST /jobs/delete/:id - Delete a job
+// Form handler for adding or editing a job (optional :id for editing)
+router.get("/form/:id?", showJobForm);
+
+// Update job
+router.post("/update/:id", updateJob);
+
+// Delete job
+router.post("/delete/:id", deleteJob);
 
 module.exports = router;

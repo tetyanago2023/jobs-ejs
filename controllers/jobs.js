@@ -1,7 +1,6 @@
 // controllers/jobs.js
 
 const Job = require("../models/Job");
-const {StatusCodes} = require("http-status-codes");
 
 const getAllJobs = async (req, res, next) => {
     try {
@@ -13,12 +12,10 @@ const getAllJobs = async (req, res, next) => {
         const limit = parseInt(req.query.limit, 10) || 5;
         const skip = (page - 1) * limit;
 
-        // Extract filters from query parameters
         const companyFilter = req.query.company || '';
         const positionFilter = req.query.position || '';
         const statusFilter = req.query.status || '';
 
-        // Fetch jobs with filters
         const jobs = await Job.find({
             createdBy: req.user.id,
             company: { $regex: companyFilter, $options: 'i' },
@@ -54,8 +51,22 @@ const getAllJobs = async (req, res, next) => {
     }
 };
 
-const showNewJobForm = (req, res) => {
-    res.render("newJob"); // You’ll need a `views/newJob.ejs` form template
+const showJobForm = async (req, res, next) => {
+    try {
+        if (req.params.id) {
+            const job = await Job.findOne({ _id: req.params.id, createdBy: req.user.id });
+            if (!job) {
+                req.flash("error", "Job not found.");
+                return res.redirect("/jobs");
+            }
+            return res.render("job", { job, _csrf: res.locals._csrf });
+        }
+        // Render form for a new job
+        res.render("job", { job: null, _csrf: res.locals._csrf });
+    } catch (error) {
+        req.flash("error", "An unexpected error occurred.");
+        return next(error);
+    }
 };
 
 const createJob = async (req, res, next) => {
@@ -68,32 +79,6 @@ const createJob = async (req, res, next) => {
             createdBy: req.user.id,
         });
         res.redirect("/jobs");
-    } catch (error) {
-        next(error);
-    }
-};
-
-const showJob = async (req, res, next) => {
-    try {
-        const job = await Job.findOne({ _id: req.params.id, createdBy: req.user.id });
-        if (!job) {
-            req.flash("error", "Job not found.");
-            return res.redirect("/jobs");
-        }
-        res.render("showJob", { job, viewOnly: true, _csrf: res.locals._csrf }); // use 'showJob' here
-    } catch (error) {
-        next(error);
-    }
-};
-
-const showEditJobForm = async (req, res, next) => {
-    try {
-        const job = await Job.findOne({ _id: req.params.id, createdBy: req.user.id });
-        if (!job) {
-            req.flash("error", "Job not found.");
-            return res.redirect("/jobs");
-        }
-        res.render("editJob", { job, _csrf: res.locals._csrf }); // Use res.locals._csrf instead
     } catch (error) {
         next(error);
     }
@@ -131,10 +116,8 @@ const deleteJob = async (req, res, next) => {
 
 module.exports = {
     getAllJobs,
-    showNewJobForm,
-    showJob,
+    showJobForm,
     createJob,
-    showEditJobForm,
     updateJob,
     deleteJob,
 };
