@@ -3,6 +3,12 @@
 const express = require("express");
 require("express-async-errors");
 require("dotenv").config(); // Load environment variables
+
+// extra security packages
+// const helmet = require('helmet'); // Adding of this package does not allow execution of confirmation dialog alerts for updating and deleting a job
+const rateLimiter = require('express-rate-limit').default || require('express-rate-limit');
+const xss = require('xss-clean');
+
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser"); // Added
@@ -10,6 +16,19 @@ const csrf = require("host-csrf"); // Added
 const path = require("path"); // Import the `path` module
 
 const app = express();
+
+app.set('trust proxy', 1);
+
+const limiter = rateLimiter({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter);
+
+app.use(express.json());
+// app.use(helmet()); // Adding of this package does not allow execution of confirmation dialog alerts for updating and deleting a job
+app.use(xss());
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public'))); // Use `path.join`
