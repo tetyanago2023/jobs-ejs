@@ -51,6 +51,19 @@ const getAllJobs = async (req, res, next) => {
     }
 };
 
+const showJob = async (req, res, next) => {
+    try {
+        const job = await Job.findOne({ _id: req.params.id, createdBy: req.user.id });
+        if (!job) {
+            req.flash("error", "Job not found.");
+            return res.redirect("/jobs");
+        }
+        res.render("showJob", { job, _csrf: res.locals._csrf });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const showJobForm = async (req, res, next) => {
     try {
         if (req.params.id) {
@@ -116,6 +129,7 @@ const deleteJob = async (req, res, next) => {
 
 module.exports = {
     getAllJobs,
+    showJob,       // Exported showJob function
     showJobForm,
     createJob,
     updateJob,

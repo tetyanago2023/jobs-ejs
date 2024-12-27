@@ -5,7 +5,8 @@ const router = express.Router();
 
 const {
     getAllJobs,
-    showJobForm, // Handles both new and edit forms
+    showJob,       // Added "Show Job" handler
+    showJobForm,   // Handles both new and edit forms
     createJob,
     updateJob,
     deleteJob,
@@ -18,6 +19,9 @@ router.route("/")
 
 // Form handler for adding or editing a job (optional :id for editing)
 router.get("/form/:id?", showJobForm);
+
+// Show a specific job
+router.get("/:id", showJob); // New route to show a job
 
 // Update job
 router.post("/update/:id", updateJob);
