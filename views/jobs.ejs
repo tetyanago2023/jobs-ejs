@@ -1,4 +1,4 @@
-<!--/view/jobs.ejs-->
+<!-- /views/jobs.ejs -->
 
 <%- include("partials/head.ejs") %>
 <%- include("partials/header.ejs") %>
@@ -64,7 +64,12 @@
                     </td>
                     <td>
                         <!-- Delete Button -->
-                        <form method="POST" action="/jobs/delete/<%= job.id %>" style="display:inline;" id="delete-form-<%= job.id %>">
+                        <form
+                                method="POST"
+                                action="/jobs/delete/<%= job.id %>?page=<%= currentPage %>&limit=<%= limit %>&company=<%= companyFilter %>&position=<%= positionFilter %>&status=<%= statusFilter %>"
+                                style="display:inline;"
+                                id="delete-form-<%= job.id %>"
+                        >
                             <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
                             <button type="submit" class="btn btn-danger delete-button">Delete Job</button>
                         </form>

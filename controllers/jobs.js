@@ -121,7 +121,13 @@ const deleteJob = async (req, res, next) => {
         if (!job) {
             req.flash("error", "Job not found.");
         }
-        res.redirect("/jobs");
+
+        // Preserve filters and pagination in redirect URL
+        const { page, limit, company, position, status } = req.query;
+
+        const redirectUrl = `/jobs?page=${encodeURIComponent(page || 1)}&limit=${encodeURIComponent(limit || 10)}&company=${encodeURIComponent(company || '')}&position=${encodeURIComponent(position || '')}&status=${encodeURIComponent(status || '')}`;
+
+        res.redirect(redirectUrl);
     } catch (error) {
         next(error);
     }
@@ -129,7 +135,7 @@ const deleteJob = async (req, res, next) => {
 
 module.exports = {
     getAllJobs,
-    showJob,       // Exported showJob function
+    showJob,
     showJobForm,
     createJob,
     updateJob,
