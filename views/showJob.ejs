@@ -1,0 +1,29 @@
+<!--views/showJob.ejs-->
+
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<h2><%= job.company %> - <%= job.position %></h2>
+
+<!-- Display job details -->
+<table class="table">
+    <tr>
+        <th>Company</th>
+        <td><%= job.company %></td>
+    </tr>
+    <tr>
+        <th>Position</th>
+        <td><%= job.position %></td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td><%= job.status %></td>
+    </tr>
+</table>
+
+<!-- Back to Jobs List -->
+<a href="/jobs">
+    <button class="btn btn-secondary">Back to Jobs</button>
+</a>
+
+<%- include("partials/footer.ejs") %>

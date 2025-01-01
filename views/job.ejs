@@ -1,0 +1,42 @@
+<!-- views/job.ejs -->
+
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<h2><%= job ? "Edit Job" : "Add New Job" %></h2>
+<form id="job-form" method="POST" action="<%= job ? `/jobs/update/${job._id}` : '/jobs' %>">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>"> <!-- CSRF Token -->
+    <label for="company">Company</label>
+    <input type="text" id="company" name="company" value="<%= job ? job.company : "" %>" required autofocus>
+    <label for="position">Position</label>
+    <input type="text" id="position" name="position" value="<%= job ? job.position : "" %>" required>
+    <label for="status">Status</label>
+    <select id="status" name="status">
+        <option value="pending" <%= job && job.status === "pending" ? "selected" : "" %>>Pending</option>
+        <option value="interview" <%= job && job.status === "interview" ? "selected" : "" %>>Interview</option>
+        <option value="declined" <%= job && job.status === "declined" ? "selected" : "" %>>Declined</option>
+    </select>
+    <button type="submit" class="btn btn-primary" id="<%= job ? 'update-button' : 'create-button' %>">
+        <%= job ? "Update" : "Create" %>
+    </button>
+    <!-- Back to Jobs Button (Cancel) -->
+    <a href="/jobs">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+    </a>
+</form>
+
+<!-- Script for conditional confirmation -->
+<script>
+    // Add confirmation only for updating a job
+    const updateButton = document.getElementById('update-button');
+    if (updateButton) {
+        updateButton.addEventListener('click', function(event) {
+            const confirmation = confirm("Are you sure you want to update this job?");
+            if (!confirmation) {
+                event.preventDefault(); // Prevent form submission if canceled
+            }
+        });
+    }
+</script>
+
+<%- include("partials/footer.ejs") %>
