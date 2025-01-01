@@ -21,7 +21,7 @@ router.route("/")
 router.get("/form/:id?", showJobForm);
 
 // Show a specific job
-router.get("/:id", showJob); // Route to display details of a single job
+router.get("/:id", showJob);
 
 // Update a job
 router.post("/update/:id", updateJob);

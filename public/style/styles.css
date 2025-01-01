@@ -34,9 +34,9 @@
 }
 
 #jobs-table input::placeholder {
-    font-size: 12px; /* Adjust size as needed */
-    color: #666; /* Placeholder text color */
-    font-style: italic; /* Optional: Add styling for differentiation */
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
 }
 
 /* Default (light mode) styles */
